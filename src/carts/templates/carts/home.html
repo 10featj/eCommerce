@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %} alert-danger {% else %} alert-{{ message.tags }} {% endif %} alert-dismissible fade show" role="alert">
+          <strong>{{message|safe}}</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<h1>Cart</h1>
+
+{% if cart.products.exists %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Product Name</th>
+            <th>Product Price</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for product in cart.products.all %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td><a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+
+                {% include 'products/snippets/update-cart.html' with product=product cart=cart in_cart=True %}</td>
+            <td>{{ product.price }}</td>
+        </tr>
+    {% endfor %}
+        <tr>
+            <td colspan="2"></td>
+            <td><b>Subtotal</b> {{cart.sub_total}}</td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td><b>total</b> {{cart.total}}</td>
+        </tr>
+    </tbody>
+</table>
+{% else %}
+    <p class="lead">Cart is empty</p>
+{% endif %}
+
+{% endblock %}

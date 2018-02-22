@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+          <strong>{{message|safe}}</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
+        <div class="row">
+        {% for obj in object_list %}
+            <div class="col">
+                {{ forloop.counter }}
+                {% include 'products/snippets/card.html' with instance=obj %}
+
+                {% if forloop.counter|divisibleby:2 %}
+            </div></div><div class="row"><div class="col-12"><hr></div>
+                {% else %}
+                </div>
+                {% endif %}
+
+        {% endfor %}
+        </div>
+
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-end">
+      {% if object_list.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ object_list.previous_page_number }}" tabindex="-1">Previous</a>
+    </li>
+      {% endif %}
+
+    {% for i in object_list.paginator.page_range %}
+      {% if object_list.number == i %}
+        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+      {%endfor%}
+
+      {% if object_list.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ object_list.next_page_number }}">Next</a>
+    </li>
+      {% endif %}
+  </ul>
+</nav>
+
+{% endblock %}
