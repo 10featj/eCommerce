@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'search',
     'tags',
     'carts',
+    
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

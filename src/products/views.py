@@ -6,6 +6,7 @@ from carts.models import Cart
 from .models import Product
 from django.contrib import messages
 
+
 class ProductFeaturedListView(ListView):
     template_name = "products/list.html"
 
