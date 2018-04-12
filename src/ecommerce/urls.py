@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.conf.urls.static import static
-
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 from .views import home_page, about_page, contact_page, login_page, register_page, home_page_one
+from api.routes import api_router
 
 
 urlpatterns = [
@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^cart/', include("carts.urls", namespace='cart')),
     url(r'^search/', include("search.urls", namespace='search')),
     url(r'^admin/', admin.site.urls),
+    url(r'^api/v1/', include(api_router.urls)),
+
 ]
 
 if settings.DEBUG:

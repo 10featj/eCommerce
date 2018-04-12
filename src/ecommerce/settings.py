@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'products',
     'search',
     'tags',
+    'orders',
     'carts',
+    'ecommerce',
+    'api',
     
     'rest_framework',
 ]

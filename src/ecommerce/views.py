@@ -2,25 +2,8 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ContactForm, LoginForm, RegisterForm
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from .serializers import UserSerializer, GroupSerializer
+from django.contrib.auth.models import User
 
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
 
 def home_page(request):
     context = {
@@ -69,7 +52,7 @@ def contact_page(request):
 
 def login_page(request):
     form = LoginForm(request.POST or None)
-    context ={
+    context = {
         "form": form
     }
     print(request.user.is_authenticated())
@@ -80,7 +63,7 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            #context['form'] = LoginForm()
+            # context['form'] = LoginForm()
             return redirect("/")
         else:
             print("Error")
