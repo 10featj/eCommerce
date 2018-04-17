@@ -3,6 +3,8 @@ from .models import Cart
 from django.contrib import messages
 from products.models import Product
 from orders.models import Order
+from accounts.forms import LoginForm, GuestForm
+from billing.models import BillingProfile
 
 
 def cart_home(request):
@@ -43,28 +45,25 @@ def checkout_home(request):
         return redirect("cart:home")
     else:
         order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
-    return render(request, "carts/checkout.html", {"object": order_obj})
+    user = request
+    billing_profile = None
+    login_form = LoginForm()
+    guest_form = GuestForm()
+
+    if request.user.is_authenticated():
+        if request.user.email:
+            billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(
+                user=request.user,
+                email=request.user.email,
+            )
+            print(request.user.email)
+
+    context = {
+        "object": new_order_obj,
+        "billing_profile": billing_profile,
+        "login_form": login_form
+    }
+
+    return render(request, "carts/checkout.html", context)
 
 
-    # cart_id = request.session.get('cart_id', None)
-    # qs = Cart.objects.filter(id=cart_id)
-    # if qs.count() == 1:
-    #     print('Cart Id Exists')
-    #     cart_obj = qs.first()
-    #     if request.user.is_authenticated() and cart_obj.user is None:
-    #         cart_obj.user = request.user
-    #         cart_obj.save()
-    # else:
-    #     cart_obj = Cart.objects.new(user=request.user)
-    #     request.session['cart_id'] = cart_obj.id
-
-
-    # print(request.session) # session is on the request method
-    # print(dir(request.session))
-    # key = request.session.session_key(300) # 5 minutes
-    # key = request.session.set_expiry
-    # key = request.session.session_key
-    # print(key)
-    # Storing a session variable/ Getting
-    # request.session['first_name'] = "Jordan" # Setter
-    # print(request.session.get('first_name', 'Unknown')) # Getter
